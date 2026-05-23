@@ -1,0 +1,57 @@
+---
+test_name: Contrato GET /api/produtos — retorna lista com estrutura correta
+
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Lista de produtos retorna status 200
+    request:
+      url: "{base_url}/api/produtos"
+      method: GET
+    response:
+      status_code: 200
+      headers:
+        content-type: application/json
+      verify_response_with:
+        - function: tests.tavern_helpers:verifica_lista_produtos
+
+---
+test_name: Contrato POST /api/comprar — compra com sucesso
+
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Compra de teclado aprovada
+    request:
+      url: "{base_url}/api/comprar"
+      method: POST
+      json:
+        produto: teclado
+        cartao: "1234-5678"
+        cupom: ""
+    response:
+      status_code: 200
+      json:
+        status: sucesso
+        mensagem: "Compra aprovada!"
+        valor_pago: 200.0
+
+---
+test_name: Contrato POST /api/comprar — produto inexistente retorna 404
+
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Produto que não existe retorna 404
+    request:
+      url: "{base_url}/api/comprar"
+      method: POST
+      json:
+        produto: "produto_que_nao_existe"
+        cartao: "1234-5678"
+        cupom: ""
+    response:
+      status_code: 404

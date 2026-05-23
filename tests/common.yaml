@@ -1,0 +1,6 @@
+---
+name: Configuração base da API
+description: URL base para todos os testes Tavern
+
+variables:
+  base_url: "http://localhost:8000"
